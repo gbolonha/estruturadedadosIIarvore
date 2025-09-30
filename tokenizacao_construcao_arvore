@@ -1,0 +1,52 @@
+// ========================
+    // Tokenização 
+    // ========================
+    private List<String> tokenizar(String expressao) {
+        List<String> elementos = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+
+        for (char c : expressao.toCharArray()) {
+            if (c == '(' || c == ')') {
+                if (sb.length() > 0) { elementos.add(sb.toString()); sb.setLength(0); }
+                elementos.add("" + c);
+            } else if (c == ' ') {
+                if (sb.length() > 0) { elementos.add(sb.toString()); sb.setLength(0); }
+            } else {
+                sb.append(c);
+            }
+        }
+
+        if (sb.length() > 0) elementos.add(sb.toString());
+        return elementos;
+    }
+
+    // ========================
+    // Construção da árvore
+    // ========================
+    private No construirArvore(List<String> elementos, int[] indice) {
+        if (indice[0] >= elementos.size()) return null;
+
+        String el = elementos.get(indice[0]);
+
+        if (el.equals("*")) {
+            indice[0]++;
+            return null;
+        }
+
+        if (el.equals("(")) {
+            indice[0]++;
+            String valor = elementos.get(indice[0]); // apenas string
+            indice[0]++;
+            No no = new No(valor);
+            no.esquerda = construirArvore(elementos, indice);
+            no.direita = construirArvore(elementos, indice);
+
+            if (!elementos.get(indice[0]).equals(")"))
+                throw new RuntimeException("Parêntese de fechamento esperado");
+
+            indice[0]++;
+            return no;
+        }
+
+        throw new RuntimeException("Elemento inválido: " + el);
+    }
