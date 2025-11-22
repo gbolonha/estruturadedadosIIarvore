@@ -55,6 +55,7 @@ public class gerenciadorArvores {
                     gerenciador.TitaniumAvl.imprimirEmOrdem();
                     break;
                 case 5:
+                    gerenciador.QueenBeeAvl.unirDuasArvores(AxionAvl, TitaniumAvl);
                     //criar a arvore QueenBee (união das duas)
                     break;
                 case 6:
@@ -128,8 +129,8 @@ public class gerenciadorArvores {
         }
     }
      
-    private void unirDuasArvores(ArvoreAvl arvore1, ArvoreAvl arvore2, int num1, int num2){
-        
+    private void unirDuasArvores(ArvoreAvl arvore1, ArvoreAvl arvore2){
+        QueenBeeAvl.juntarArvores(arvore1, arvore2);
     }   
     private void inserirNaArvore(int tamanho, ArvoreAvl arvore) {
         for (int i = 0; i < tamanho; i++) {

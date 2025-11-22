@@ -98,7 +98,7 @@ public class ArvoreAvl {
     private void imprimirEmOrdem(Funcionario no) {
         if (no != null) {
             imprimirEmOrdem(no.esquerda);
-            System.out.print(no.nome + " "); 
+            System.out.println(no.nome); 
             imprimirEmOrdem(no.direita);
         }
     }
@@ -108,8 +108,39 @@ public class ArvoreAvl {
         System.out.println();
     }
     
-    // Adicione getters se necessário para testar a raiz
     public Funcionario getRaiz() {
         return raiz;
+    }
+
+    private void juntar(Funcionario atual){
+        if( atual != null){
+            inserir(atual.esquerda);
+            inserir(atual.direita);
+            juntar(atual.esquerda);
+            juntar(atual.direita);
+        }
+    }
+
+    public void juntarArvores (ArvoreAvl AxionAvl, ArvoreAvl TitaniumAvl){
+        Funcionario raizAxion = AxionAvl.raiz;
+        Funcionario raizTitanium = TitaniumAvl.raiz;
+
+        inserir(raizTitanium);
+        if(raizTitanium != null && raizAxion != null){
+            throw new IllegalArgumentException("Arvores vazias.");
+        }
+        if(raizAxion != null && raizTitanium != null){
+            inserir(raizAxion);
+            inserir(raizTitanium);
+            juntar(raizAxion);
+            juntar(raizTitanium);
+            return;
+        }
+        if(raizTitanium == null){
+            throw new IllegalArgumentException("Arvore Titanium vazia.");
+        }
+        if(raizAxion == null){
+            throw new IllegalArgumentException("Arvore Axion vazia.");
+        }
     }
 }
