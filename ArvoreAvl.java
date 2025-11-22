@@ -14,6 +14,11 @@ public class ArvoreAvl {
 
     public Funcionario rotacaoDireita(Funcionario novo) {
         Funcionario x = novo.esquerda;
+        
+        if (x == null) {
+            return novo;
+        }
+        
         Funcionario y = x.direita;
 
         x.direita = novo;
@@ -46,44 +51,35 @@ public class ArvoreAvl {
     
     private Funcionario inserir(Funcionario no, Funcionario novoFuncionario) {
         if (no == null) {
+            novoFuncionario.id = this.tamanho + 1;
             this.tamanho++;
             return novoFuncionario;
         }
 
         String nomeNovo = novoFuncionario.nome;
-        
         int comparacao = nomeNovo.compareTo(no.nome);
 
         if (comparacao < 0) {
             no.esquerda = inserir(no.esquerda, novoFuncionario);
         }
-        
-        else if (comparacao > 0) {
+        else { 
             no.direita = inserir(no.direita, novoFuncionario);
-        }
-        
-        else {
-            return no; 
         }
         
         no.altura = 1 + maximo(obterAltura(no.esquerda), obterAltura(no.direita));
         int balanceamento = obterFatorBalanceamento(no);
-      
-        if (balanceamento > 1 && nomeNovo.compareTo(no.esquerda.nome) < 0) {
+        
+        if (balanceamento > 1) {
+            if (obterFatorBalanceamento(no.esquerda) < 0) {
+                no.esquerda = rotacaoEsquerda(no.esquerda);
+            }
             return rotacaoDireita(no);
         }
 
-        if (balanceamento < -1 && nomeNovo.compareTo(no.direita.nome) > 0) {
-            return rotacaoEsquerda(no);
-        }
-
-        if (balanceamento > 1 && nomeNovo.compareTo(no.esquerda.nome) > 0) {
-            no.esquerda = rotacaoEsquerda(no.esquerda);
-            return rotacaoDireita(no);
-        }
-
-        if (balanceamento < -1 && nomeNovo.compareTo(no.direita.nome) < 0) {
-            no.direita = rotacaoDireita(no.direita);
+        if (balanceamento < -1) {
+            if (obterFatorBalanceamento(no.direita) > 0) {
+                no.direita = rotacaoDireita(no.direita);
+            }
             return rotacaoEsquerda(no);
         }
 
@@ -92,7 +88,7 @@ public class ArvoreAvl {
 
     public void inserir(Funcionario novoFuncionario) {
         raiz = inserir(raiz, novoFuncionario);
-        tamanho++;
+        System.out.println(tamanho);
     }
 
     private void imprimirEmOrdem(Funcionario no) {
@@ -114,37 +110,39 @@ public class ArvoreAvl {
 
     private void juntar(Funcionario atual){
         if( atual != null){
-            if(atual.esquerda != null){
-                inserir(atual.esquerda);
-                juntar(atual.esquerda);
-            }
-            if(atual.direita != null){
-                inserir(atual.direita);
-                juntar(atual.direita);
-            }
+            Funcionario copia = new Funcionario(
+                atual.nome,
+                atual.dataNascimento,
+                atual.dataContratacao,
+                atual.departamento,
+                atual.cargo,
+                atual.salario
+            );
+            
+            inserir(copia); 
+            
+            juntar(atual.esquerda);
+            juntar(atual.direita);
         }
     }
 
-    public void juntarArvores (ArvoreAvl AxionAvl, ArvoreAvl TitaniumAvl){
-        Funcionario raizAxion = AxionAvl.raiz;
-        Funcionario raizTitanium = TitaniumAvl.raiz;
+    public int juntarArvores (ArvoreAvl AxionAvl, ArvoreAvl TitaniumAvl){
+        Funcionario raizAxion = AxionAvl.getRaiz();
+        Funcionario raizTitanium = TitaniumAvl.getRaiz();
 
-        inserir(raizTitanium);
         if(raizTitanium == null && raizAxion == null){
             throw new IllegalArgumentException("Arvores vazias.");
-        }
-        if(raizAxion != null && raizTitanium != null){
-            inserir(raizAxion);
-            inserir(raizTitanium);
-            juntar(raizAxion);
-            juntar(raizTitanium);
-            return;
-        }
-        if(raizTitanium == null){
-            throw new IllegalArgumentException("Arvore Titanium vazia.");
         }
         if(raizAxion == null){
             throw new IllegalArgumentException("Arvore Axion vazia.");
         }
+        if(raizTitanium == null){
+            throw new IllegalArgumentException("Arvore Titanium vazia.");
+        }
+
+        juntar(raizAxion);
+        juntar(raizTitanium);
+        
+        return this.tamanho;
     }
 }

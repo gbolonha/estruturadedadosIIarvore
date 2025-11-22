@@ -14,6 +14,8 @@ public class gerenciadorArvores {
         Scanner sc = new Scanner(System.in);
         gerenciadorArvores gerenciador = new gerenciadorArvores();
         int opcao = 0;
+        int nomesLidosAxion = 0;
+        int nomesLidosTitanium = 0;
 
         do {
             System.out.println("---------Menu-------");
@@ -41,25 +43,40 @@ public class gerenciadorArvores {
 
             switch (opcao) {
                 case 1:
-                    int nomesLidosAxion = gerenciador.processarArquivo("AxionAvl.txt");
+                    nomesLidosAxion = gerenciador.processarArquivo("AxionAvl.txt");
                     gerenciador.inserirNaArvore(nomesLidosAxion, gerenciador.AxionAvl);
+                    System.out.println(nomesLidosAxion);
                     break;
                 case 2:
                     gerenciador.AxionAvl.imprimirEmOrdem();
                     break;
                 case 3:
-                    int nomesLidosTitanium = gerenciador.processarArquivo("Titanium.txt");
+                    nomesLidosTitanium = gerenciador.processarArquivo("TitaniumAvl.txt");
                     gerenciador.inserirNaArvore(nomesLidosTitanium, gerenciador.TitaniumAvl);
+                    System.out.println(nomesLidosTitanium);
                     break;
                 case 4:
                     gerenciador.TitaniumAvl.imprimirEmOrdem();
                     break;
                 case 5:
-                    gerenciador.QueenBeeAvl.unirDuasArvores(AxionAvl, TitaniumAvl);
-                    //criar a arvore QueenBee (união das duas)
+                    gerenciador.unirDuasArvores(gerenciador.AxionAvl, gerenciador.TitaniumAvl, nomesLidosAxion, nomesLidosTitanium);
                     break;
                 case 6:
-                    //inserir um novo funcionario na QueenBee
+                    System.out.print("Informe o nome do funcionario: ");
+                    String nome = sc.nextLine();
+                    System.out.print("Informe a data de nascimento do funcionario: ");
+                    String dataNascimento = sc.nextLine();
+                    System.out.print("Informe a data de ontratacao do funcionario: ");
+                    String dataContratacao = sc.nextLine();
+                    System.out.print("Informe o setor do funcionario: ");
+                    String setor = sc.nextLine();
+                    System.out.print("Informe a funcao do funcionario: ");
+                    String funcao = sc.nextLine();
+                    System.out.print("Informe o salario do funcionario: ");
+                    Double salario = Double.parseDouble(sc.nextLine().trim());
+                    Funcionario novoFuncionario = new Funcionario (nome, dataNascimento, dataContratacao, setor, funcao, salario);
+                    gerenciador.QueenBeeAvl.inserir(novoFuncionario);
+                    System.out.println(novoFuncionario);
                     break;
                 case 7:
                     gerenciador.QueenBeeAvl.imprimirEmOrdem();
@@ -129,8 +146,13 @@ public class gerenciadorArvores {
         }
     }
      
-    private void unirDuasArvores(ArvoreAvl arvore1, ArvoreAvl arvore2){
-        QueenBeeAvl.juntarArvores(arvore1, arvore2);
+    private void unirDuasArvores(ArvoreAvl arvore1, ArvoreAvl arvore2, int contadorAxion, int contadorTitaniun){
+        int total = QueenBeeAvl.juntarArvores(arvore1, arvore2);
+        System.out.println("Total de inserção: " + total);
+        if(total != contadorTitaniun + contadorAxion){
+            throw new IllegalArgumentException("Total de inserções errado, diferente do total de funcionarios a serem inseridos.");
+        }
+        
     }   
     private void inserirNaArvore(int tamanho, ArvoreAvl arvore) {
         for (int i = 0; i < tamanho; i++) {
