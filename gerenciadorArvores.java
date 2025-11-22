@@ -16,6 +16,7 @@ public class gerenciadorArvores {
         int opcao = 0;
         int nomesLidosAxion = 0;
         int nomesLidosTitanium = 0;
+        int nomesLidosQueenBee = 0;
 
         do {
             System.out.println("---------Menu-------");
@@ -26,9 +27,9 @@ public class gerenciadorArvores {
             System.out.println("5. Unificar dados de Axion e Titanium na empresa QueenBee");
             System.out.println("6. Inserir dados de novo funcionário em QueenBee");
             System.out.println("7. Exibir lista de dados dos funcionários de QueenBee ordenados pelo Nome Completo ");
-            System.out.println("8. Exibir a lista de funcionários de QueenBee cujos nomes completos começam pela letra LETRA, onde LETRA é dada pelo usuário do programa. ");
-            System.out.println("9. Buscar os dados de um funcionário a partir de seu Nome Completo");
-            System.out.println("10. Exibir a relação dos funcionários com os n salários mais altos em QueenBee em ordem decrescente de salário, com n digitado pelo usuário. ");
+            System.out.println("8. Exibir a lista de funcionários de QueenBee cujos nomes completos começam por determinada letra. ");
+            System.out.println("9. Buscar os dados de um funcionário.");
+            System.out.println("10. Exibir os n salários mais altos em QueenBee em ordem decrescente de salário.");
             System.out.println("11. Sair ");
 
             System.out.print("\nEscolha a opcão que deseja: ");
@@ -59,7 +60,7 @@ public class gerenciadorArvores {
                     gerenciador.TitaniumAvl.imprimirEmOrdem();
                     break;
                 case 5:
-                    gerenciador.unirDuasArvores(gerenciador.AxionAvl, gerenciador.TitaniumAvl, nomesLidosAxion, nomesLidosTitanium);
+                    nomesLidosQueenBee = gerenciador.unirDuasArvores(gerenciador.AxionAvl, gerenciador.TitaniumAvl, nomesLidosAxion, nomesLidosTitanium);
                     break;
                 case 6:
                     System.out.print("Informe o nome do funcionario: ");
@@ -82,13 +83,24 @@ public class gerenciadorArvores {
                     gerenciador.QueenBeeAvl.imprimirEmOrdem();
                     break;
                 case 8:
-                    //exibir os usuários com uma determinada letra
+                    System.out.print("Informe a letra que deseja buscar: ");
+                    char letra = sc.next().charAt(0);
+                    gerenciador.QueenBeeAvl.buscarLetra(letra);
                     break;
                 case 9:
-                    //buscar usuario pelo nome Completo
+                    System.out.print("Informe o nome do funcionario que deseja buscar: ");
+                    String nomeBuscar = sc.nextLine();
+                    Funcionario buscado = gerenciador.QueenBeeAvl.buscar(nomeBuscar);
+                    System.out.println(buscado);
                     break;
                 case 10:
-                    //exibir n funcionarios com maiores salarios
+                    System.out.print("Informe o numero de funcionarios que deseja saber que tem os maiores salarios: ");
+                    int numero = sc.nextInt();
+                    if(nomesLidosQueenBee < numero){
+                        System.out.println("Numero maior que o total de funcionarios na arvore.");
+                        break;
+                    }
+                    gerenciador.QueenBeeAvl.buscarMaiores(numero);
                     break;
                 case 11:
                     System.out.println("Saindo...");
@@ -146,12 +158,14 @@ public class gerenciadorArvores {
         }
     }
      
-    private void unirDuasArvores(ArvoreAvl arvore1, ArvoreAvl arvore2, int contadorAxion, int contadorTitaniun){
+    private int unirDuasArvores(ArvoreAvl arvore1, ArvoreAvl arvore2, int contadorAxion, int contadorTitaniun){
         int total = QueenBeeAvl.juntarArvores(arvore1, arvore2);
         System.out.println("Total de inserção: " + total);
         if(total != contadorTitaniun + contadorAxion){
             throw new IllegalArgumentException("Total de inserções errado, diferente do total de funcionarios a serem inseridos.");
         }
+        
+        return total;
         
     }   
     private void inserirNaArvore(int tamanho, ArvoreAvl arvore) {

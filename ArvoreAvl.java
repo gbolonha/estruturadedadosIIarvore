@@ -1,7 +1,7 @@
 public class ArvoreAvl {
     private Funcionario raiz;
     int tamanho;
-
+    
     int obterAltura(Funcionario no) {
         if (no == null)
             return 0;
@@ -143,5 +143,112 @@ public class ArvoreAvl {
         juntar(raizTitanium);
         
         return this.tamanho;
+    }
+    
+    public Funcionario buscar(String elemento) {
+ 
+        Funcionario atual = this.raiz;
+       
+        while(atual != null) {
+            
+            int comparacao = elemento.compareTo(atual.nome);
+            
+
+            if (comparacao < 0) {
+                atual = atual.esquerda;
+            }
+            else if(comparacao > 0){
+                atual = atual.direita;
+            }
+            else { 
+                return atual;
+            }
+        }
+        return null;
+    }
+    
+    public void buscarLetra(char letra){
+        if (raiz != null) {
+            buscarLetra(letra, raiz);
+        }
+    }
+    
+    private void buscarLetra(char letra, Funcionario atual){
+        if(atual == null){
+            return;
+        }
+        char primeiraLetra = atual.nome.charAt(0);
+        if (primeiraLetra == letra) {
+            System.out.println(atual.nome);
+        }
+        buscarLetra(letra, atual.esquerda);
+        buscarLetra(letra, atual.direita);
+    }
+
+
+    private void inserirEOrdenar(Funcionario novo, Funcionario[] maiores, int n) {
+        if (n <= 0) return;
+        for (int i = 0; i < n; i++) {
+            if (maiores[i] == null) {
+                maiores[i] = novo;
+                
+                for (int j = i; j > 0; j--) {
+                    if (maiores[j].salario < maiores[j-1].salario) {
+                        Funcionario temp = maiores[j];
+                        maiores[j] = maiores[j-1];
+                        maiores[j-1] = temp;
+                    } else {
+                        break;
+                    }
+                }
+                return;
+            }
+        }
+
+        if (novo.salario > maiores[0].salario) {
+            maiores[0] = novo; 
+            for (int j = 0; j < n - 1; j++) {
+                if (maiores[j].salario > maiores[j+1].salario) {
+
+                    Funcionario temp = maiores[j];
+                    maiores[j] = maiores[j+1];
+                    maiores[j+1] = temp;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
+    private void buscarMaioresRecursivo(Funcionario atual, int n, Funcionario[] maiores) {
+        if (atual == null) {
+            return;
+        }
+        buscarMaioresRecursivo(atual.esquerda, n, maiores);
+                inserirEOrdenar(atual, maiores, n);
+        
+        buscarMaioresRecursivo(atual.direita, n, maiores);
+    }
+    
+    public void buscarMaiores(int n) {
+        if (raiz == null || n <= 0) {
+            System.out.println("A árvore está vazia ou o número N é inválido.");
+            return;
+        }
+        
+        Funcionario[] maiores = new Funcionario[n];
+
+        buscarMaioresRecursivo(raiz, n, maiores);
+
+        System.out.println("\nOs " + n + " Funcionários com Maiores Salários: ");
+
+        for (int i = n - 1; i >= 0; i--) {
+            Funcionario f = maiores[i];
+            if (f != null) {
+                System.out.println("Salário: R$" + String.format("%.2f", f.salario) + 
+                                   ", Nome: " + f.nome + 
+                                   " (ID: " + f.id + ")");
+            }
+        }
     }
 }
