@@ -45,7 +45,7 @@ public class gerenciadorArvores {
                 case 1:
                     nomesLidosAxion = gerenciador.processarArquivo("AxionAvl.txt");
                     gerenciador.inserirNaArvore(nomesLidosAxion, gerenciador.AxionAvl);
-                    System.out.println(nomesLidosAxion);
+                    System.out.println("Total de funcionarios inseridos na arvore: " + nomesLidosAxion);
                     break;
                 case 2:
                     gerenciador.AxionAvl.imprimirEmOrdem();
@@ -53,7 +53,7 @@ public class gerenciadorArvores {
                 case 3:
                     nomesLidosTitanium = gerenciador.processarArquivo("TitaniumAvl.txt");
                     gerenciador.inserirNaArvore(nomesLidosTitanium, gerenciador.TitaniumAvl);
-                    System.out.println(nomesLidosTitanium);
+                    System.out.println("Total de funcionarios inseridos na arvore: " + nomesLidosTitanium);
                     break;
                 case 4:
                     gerenciador.TitaniumAvl.imprimirEmOrdem();

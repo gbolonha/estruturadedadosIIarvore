@@ -88,7 +88,6 @@ public class ArvoreAvl {
 
     public void inserir(Funcionario novoFuncionario) {
         raiz = inserir(raiz, novoFuncionario);
-        System.out.println(tamanho);
     }
 
     private void imprimirEmOrdem(Funcionario no) {
