@@ -114,10 +114,14 @@ public class ArvoreAvl {
 
     private void juntar(Funcionario atual){
         if( atual != null){
-            inserir(atual.esquerda);
-            inserir(atual.direita);
-            juntar(atual.esquerda);
-            juntar(atual.direita);
+            if(atual.esquerda != null){
+                inserir(atual.esquerda);
+                juntar(atual.esquerda);
+            }
+            if(atual.direita != null){
+                inserir(atual.direita);
+                juntar(atual.direita);
+            }
         }
     }
 
@@ -126,7 +130,7 @@ public class ArvoreAvl {
         Funcionario raizTitanium = TitaniumAvl.raiz;
 
         inserir(raizTitanium);
-        if(raizTitanium != null && raizAxion != null){
+        if(raizTitanium == null && raizAxion == null){
             throw new IllegalArgumentException("Arvores vazias.");
         }
         if(raizAxion != null && raizTitanium != null){
